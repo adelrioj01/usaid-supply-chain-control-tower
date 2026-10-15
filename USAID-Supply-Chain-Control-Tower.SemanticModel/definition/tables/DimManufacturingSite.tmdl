@@ -1,0 +1,26 @@
+table DimManufacturingSite
+	lineageTag: 26c1abcd-3b97-4eef-a020-d10fd6e3accd
+
+	column ManufacturingSiteKey
+		dataType: int64
+		isHidden
+		lineageTag: 24f4195b-2b25-494e-a5e5-323a890658b5
+		summarizeBy: none
+		sourceColumn: ManufacturingSiteKey
+
+	column ManufacturingSite
+		dataType: string
+		lineageTag: 1ad46977-0519-442d-bc43-c578c811ae9e
+		summarizeBy: none
+		sourceColumn: ManufacturingSite
+
+	partition DimManufacturingSite = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\DimManufacturingSite.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ManufacturingSiteKey", Int64.Type}, {"ManufacturingSite", type text}}, "en-US")
+				in
+				    #"Changed Type"
+

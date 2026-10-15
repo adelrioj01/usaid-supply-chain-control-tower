@@ -2,6 +2,12 @@
 
 Power BI portfolio project built from USAID's public Supply Chain Shipment Pricing Data. The analysis covers health-commodity deliveries made from 2006 through 2015.
 
+## Live dashboard
+
+[**Open the interactive Power BI report**](https://app.powerbi.com/view?r=eyJrIjoiNjNkOTczY2ItOTAwMi00ZjUzLWE0N2ItM2I5NTE0MzNkOTUxIiwidCI6Ijc5Yzc0MmM0LWU2MWMtNGZhNS1iZTg5LWEzY2I1NjZhODBkMSIsImMiOjN9)
+
+The report contains three interactive pages covering executive KPIs, delivery performance, and logistics cost and data quality.
+
 ## Business questions
 
 - Which countries and shipment modes have the highest delay rates?
@@ -38,6 +44,8 @@ USAID originally published the dataset through `data.usaid.gov` under portal ide
 
 See [DATA_NOTICE.md](docs/DATA_NOTICE.md) for attribution and scope.
 
+> **Portfolio notice:** This independent project uses historical public data and is not affiliated with or endorsed by USAID. It does not represent current USAID operations.
+
 ## Model design
 
 The source has one row per shipment line, but weight and freight describe the shipment. Summing those fields directly from the source would duplicate logistics costs. The pipeline therefore creates two fact tables:
@@ -61,13 +69,9 @@ The dashboard displays freight and weight coverage beside affected metrics. [Dat
 
 ## Dashboard pages
 
-1. Executive overview
-2. Delivery performance
-3. Freight efficiency
-4. Commodity portfolio
-5. Vendor and site performance
-6. Country profile
-7. Data quality
+1. **Executive Overview** — headline KPIs, shipment trends and geographic performance.
+2. **Delivery Performance** — on-time delivery, delays, modes, countries and vendors.
+3. **Logistics Cost & Quality** — freight efficiency, commodity value and data coverage.
 
 The detailed visual plan is in [dashboard-blueprint.md](docs/dashboard-blueprint.md).
 
@@ -86,6 +90,9 @@ The detailed visual plan is in [dashboard-blueprint.md](docs/dashboard-blueprint
 ├── src/analyze_usaid.py              Independent KPI calculations
 ├── tests/test_usaid_data.py          Reconciliation and relationship tests
 ├── theme/global-health-supply-chain.json
+├── USAID-Supply-Chain-Control-Tower.pbip
+├── USAID-Supply-Chain-Control-Tower.Report/
+├── USAID-Supply-Chain-Control-Tower.SemanticModel/
 └── tools/build_usaid_profile.mjs     Workbook builder
 ```
 
@@ -103,18 +110,11 @@ Or run:
 powershell -ExecutionPolicy Bypass -File scripts/build_project.ps1
 ```
 
-## Build the Power BI report
+## Open the Power BI report
 
-Power BI Desktop is used to materialize the semantic model from the dependency-safe TMDL scripts in `model/`:
+Open `USAID-Supply-Chain-Control-Tower.pbip` in Power BI Desktop. The repository includes the report definition, semantic model and custom theme in source-controlled Power BI Project format.
 
-1. Apply `01-build-tables.tmdl`.
-2. Apply the measure batches `02a` through `02e` in filename order.
-3. Apply `03-build-relationships.tmdl`.
-4. Refresh the model and reconcile it against `docs/qa-checklist.md`.
-5. Import `theme/global-health-supply-chain.json`.
-6. Build the pages described in `docs/dashboard-blueprint.md`.
-
-The semantic model is complete. Report pages and final screenshots remain in progress; the repository does not yet claim a finished `.pbix` or `.pbip` deliverable.
+The data pipeline and validation commands above reproduce the processed model inputs. The dependency-safe TMDL scripts in `model/` can also be used to reconstruct the semantic model manually.
 
 ## Skills demonstrated
 

@@ -1,0 +1,7 @@
+createOrReplace
+  ref table FactShipments
+    measure 'Delivery Risk Status' = SWITCH ( TRUE (), [Delivery Eligible Shipments] = 0, "No eligible shipments", [On Time Delivery Rate] >= 0.95, "Target met", [On Time Delivery Rate] >= 0.85, "Monitor", "Action required" )
+      displayFolder: 04 Risk and prioritization
+    measure 'On Time Delivery Rate PY' = CALCULATE ( [On Time Delivery Rate], DATEADD ( DimDate[Date], -1, YEAR ) )
+      formatString: 0.0%
+      displayFolder: 90 Time intelligence

@@ -1,0 +1,22 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_ProTooling = ["TMDLView_Desktop","DevMode"]
+
+annotation PBI_QueryOrder = ["DimCountry","DimDate","DimManufacturingSite","DimProduct","DimProject","DimShippingMethod","DimVendor","FactShipmentLines","FactShipments","DataRoot"]
+
+ref table DimCountry
+ref table DimDate
+ref table DimManufacturingSite
+ref table DimProduct
+ref table DimProject
+ref table DimShippingMethod
+ref table DimVendor
+ref table FactShipmentLines
+ref table FactShipments
+

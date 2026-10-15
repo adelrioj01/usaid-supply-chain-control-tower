@@ -1,0 +1,5 @@
+createOrReplace
+  ref table FactShipments
+    measure 'On Time Rate YoY Change' = [On Time Delivery Rate] - [On Time Delivery Rate PY]
+      formatString: 0.0%
+      displayFolder: 90 Time intelligence

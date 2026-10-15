@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "USAID-Supply-Chain-Control-Tower"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "748dc0a5-f20f-43bf-9af3-5218b513e96b"
+  }
+}

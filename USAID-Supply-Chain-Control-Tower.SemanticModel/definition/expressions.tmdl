@@ -1,0 +1,5 @@
+expression DataRoot = "C:\Users\adurr\miniconda3\PowerBI-Portfolio\data\processed" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e00d7cff-e59e-4be5-bc7a-d31cff6e4dc2
+
+	annotation PBI_ResultType = Text
+

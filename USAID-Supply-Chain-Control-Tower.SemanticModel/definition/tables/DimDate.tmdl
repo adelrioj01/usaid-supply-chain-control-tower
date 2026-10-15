@@ -1,0 +1,78 @@
+table DimDate
+	lineageTag: bd87067c-283a-49d6-bf56-bef20efc9c73
+
+	column DateKey
+		dataType: int64
+		isHidden
+		lineageTag: caa53034-23dd-496c-bdc4-366ec15c5aab
+		summarizeBy: none
+		sourceColumn: DateKey
+
+	column Date
+		dataType: dateTime
+		formatString: yyyy-MM-dd
+		lineageTag: 154e7458-b407-4539-867f-c56e89f60ee9
+		summarizeBy: none
+		sourceColumn: Date
+
+	column Year
+		dataType: int64
+		lineageTag: 379cd669-ae55-48bf-891b-a0d4cf1965a4
+		summarizeBy: none
+		sourceColumn: Year
+
+	column Quarter
+		dataType: string
+		lineageTag: 22cc09bc-0a8e-4775-8289-99c410a6451a
+		summarizeBy: none
+		sourceColumn: Quarter
+
+	column MonthNumber
+		dataType: int64
+		lineageTag: e8a9d9ab-96cb-4d2f-a7fe-4507da9692c4
+		summarizeBy: none
+		sourceColumn: MonthNumber
+
+	column MonthName
+		dataType: string
+		lineageTag: 62f172a4-aefd-4246-b1d7-025337026ee4
+		summarizeBy: none
+		sourceColumn: MonthName
+
+	column YearMonth
+		dataType: string
+		lineageTag: 40e3901d-63ef-422c-bad7-acb19481ae97
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+	column WeekNumber
+		dataType: int64
+		lineageTag: 14969bb1-4b0c-4d6f-960c-4bd175229ed5
+		summarizeBy: none
+		sourceColumn: WeekNumber
+
+	hierarchy Calendar
+		lineageTag: 7f89aa3c-4aa6-4045-9a22-675c628b8030
+
+		level Year
+			lineageTag: 27d4f41f-dd17-4b14-8266-1e2869056726
+			column: Year
+
+		level Month
+			lineageTag: 3dbd64a0-b367-4c46-b987-6768ecb4f84c
+			column: MonthName
+
+		level Date
+			lineageTag: f19bb3ad-b21b-4e81-b19f-95c923b2491c
+			column: Date
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\DimDate.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"MonthNumber", Int64.Type}, {"MonthName", type text}, {"YearMonth", type text}, {"WeekNumber", Int64.Type}}, "en-US")
+				in
+				    #"Changed Type"
+

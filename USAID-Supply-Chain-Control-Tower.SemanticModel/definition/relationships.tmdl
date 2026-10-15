@@ -1,0 +1,82 @@
+relationship FactShipments_Country
+	fromColumn: FactShipments.CountryKey
+	toColumn: DimCountry.CountryKey
+
+relationship FactLines_Country
+	fromColumn: FactShipmentLines.CountryKey
+	toColumn: DimCountry.CountryKey
+
+relationship FactShipments_Vendor
+	fromColumn: FactShipments.VendorKey
+	toColumn: DimVendor.VendorKey
+
+relationship FactLines_Vendor
+	fromColumn: FactShipmentLines.VendorKey
+	toColumn: DimVendor.VendorKey
+
+relationship FactShipments_Project
+	fromColumn: FactShipments.ProjectKey
+	toColumn: DimProject.ProjectKey
+
+relationship FactLines_Project
+	fromColumn: FactShipmentLines.ProjectKey
+	toColumn: DimProject.ProjectKey
+
+relationship FactShipments_Site
+	fromColumn: FactShipments.ManufacturingSiteKey
+	toColumn: DimManufacturingSite.ManufacturingSiteKey
+
+relationship FactLines_Site
+	fromColumn: FactShipmentLines.ManufacturingSiteKey
+	toColumn: DimManufacturingSite.ManufacturingSiteKey
+
+relationship FactShipments_Method
+	fromColumn: FactShipments.ShippingMethodKey
+	toColumn: DimShippingMethod.ShippingMethodKey
+
+relationship FactLines_Method
+	fromColumn: FactShipmentLines.ShippingMethodKey
+	toColumn: DimShippingMethod.ShippingMethodKey
+
+relationship FactLines_Product
+	fromColumn: FactShipmentLines.ProductKey
+	toColumn: DimProduct.ProductKey
+
+relationship FactShipments_ActualDate
+	fromColumn: FactShipments.ActualDeliveryDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactLines_ActualDate
+	fromColumn: FactShipmentLines.ActualDeliveryDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactShipments_OrderDate
+	isActive: false
+	fromColumn: FactShipments.OrderDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactShipments_ScheduledDate
+	isActive: false
+	fromColumn: FactShipments.ScheduledDeliveryDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactShipments_RecordedDate
+	isActive: false
+	fromColumn: FactShipments.DeliveryRecordedDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactLines_OrderDate
+	isActive: false
+	fromColumn: FactShipmentLines.OrderDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactLines_ScheduledDate
+	isActive: false
+	fromColumn: FactShipmentLines.ScheduledDeliveryDateKey
+	toColumn: DimDate.DateKey
+
+relationship FactLines_RecordedDate
+	isActive: false
+	fromColumn: FactShipmentLines.DeliveryRecordedDateKey
+	toColumn: DimDate.DateKey
+

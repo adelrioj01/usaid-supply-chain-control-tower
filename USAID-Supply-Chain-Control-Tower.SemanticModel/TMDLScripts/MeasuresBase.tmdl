@@ -1,0 +1,35 @@
+createOrReplace
+  ref table FactShipments
+    measure 'Shipments' = COUNTROWS ( FactShipments )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+    measure 'Shipment Lines' = COUNTROWS ( FactShipmentLines )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+    measure 'Line Item Quantity' = SUM ( FactShipmentLines[LineItemQuantity] )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+    measure 'Commodity Value' = SUM ( FactShipmentLines[LineItemValueUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+    measure 'Insurance Value' = SUM ( FactShipmentLines[InsuranceUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+    measure 'Average Late Days' = CALCULATE ( AVERAGE ( FactShipments[DeliveryDelayDays] ), FactShipments[LateFlag] = TRUE () )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+    measure 'Average Order to Delivery Days' = AVERAGE ( FactShipments[OrderToDeliveryDays] )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+    measure 'P90 Late Days' = PERCENTILEX.INC ( FILTER ( FactShipments, FactShipments[LateFlag] = TRUE () ), FactShipments[DeliveryDelayDays], 0.9 )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+    measure 'Freight Cost' = SUM ( FactShipments[FreightCostUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 03 Freight efficiency
+    measure 'Shipment Weight Kg' = SUM ( FactShipments[WeightKg] )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+    measure 'Shipment Attribute Conflicts' = SUM ( FactShipments[AttributeConflictCount] )
+      formatString: #,0
+      displayFolder: 05 Data quality

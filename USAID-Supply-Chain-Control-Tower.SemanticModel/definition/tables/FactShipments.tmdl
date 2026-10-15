@@ -1,0 +1,333 @@
+table FactShipments
+	lineageTag: 02c62b68-20ca-4011-9a9f-a9239de10197
+
+	measure Shipments = COUNTROWS ( FactShipments )
+		formatString: #,0
+		displayFolder: 01 Volume and value
+		lineageTag: 6e39d721-40ae-4017-a715-253b6189e877
+
+	measure 'Shipment Lines' = COUNTROWS ( FactShipmentLines )
+		formatString: #,0
+		displayFolder: 01 Volume and value
+		lineageTag: 3dfe2cf3-c7e4-4d0b-83e2-6ce7c73cbb70
+
+	measure 'Line Item Quantity' = SUM ( FactShipmentLines[LineItemQuantity] )
+		formatString: #,0
+		displayFolder: 01 Volume and value
+		lineageTag: 188c8efc-1440-4841-afd6-229a2679e94d
+
+	measure 'Commodity Value' = SUM ( FactShipmentLines[LineItemValueUSD] )
+		formatString: $#,0;($#,0)
+		displayFolder: 01 Volume and value
+		lineageTag: 7904ce80-6bb7-49d0-a6a6-a28d03b26c60
+
+	measure 'Insurance Value' = SUM ( FactShipmentLines[InsuranceUSD] )
+		formatString: $#,0;($#,0)
+		displayFolder: 01 Volume and value
+		lineageTag: 42fd9ec5-db65-4ec1-bc34-d53a93f4ad53
+
+	measure 'Average Late Days' = CALCULATE ( AVERAGE ( FactShipments[DeliveryDelayDays] ), FactShipments[LateFlag] = TRUE () )
+		formatString: 0.0
+		displayFolder: 02 Delivery performance
+		lineageTag: 578b4385-7aec-4d47-8b4c-0fc8254b84d4
+
+	measure 'Average Order to Delivery Days' = AVERAGE ( FactShipments[OrderToDeliveryDays] )
+		formatString: 0.0
+		displayFolder: 02 Delivery performance
+		lineageTag: fb4f20c8-fe7b-4992-b2ae-87e23d1c55f1
+
+	measure 'P90 Late Days' = PERCENTILEX.INC ( FILTER ( FactShipments, FactShipments[LateFlag] = TRUE () ), FactShipments[DeliveryDelayDays], 0.9 )
+		formatString: 0.0
+		displayFolder: 02 Delivery performance
+		lineageTag: 68899d65-f59f-4e04-944e-30226f160bbe
+
+	measure 'Freight Cost' = SUM ( FactShipments[FreightCostUSD] )
+		formatString: $#,0;($#,0)
+		displayFolder: 03 Freight efficiency
+		lineageTag: 537c7c7f-b1d1-45e3-badd-4286ac7a3347
+
+	measure 'Shipment Weight Kg' = SUM ( FactShipments[WeightKg] )
+		formatString: #,0
+		displayFolder: 03 Freight efficiency
+		lineageTag: 0bda0095-75dd-4d64-aa4f-2ab178d32dc2
+
+	measure 'Shipment Attribute Conflicts' = SUM ( FactShipments[AttributeConflictCount] )
+		formatString: #,0
+		displayFolder: 05 Data quality
+		lineageTag: c8daa3c1-c473-47f5-910a-e1685739b8e9
+
+	measure 'First Line Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[FirstLineDesignation] = TRUE () )
+		formatString: $#,0;($#,0)
+		displayFolder: 01 Volume and value
+		lineageTag: 4d7238e8-ad24-40a1-a8cd-2dbfbb039215
+
+	measure 'Delivery Eligible Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[OnTimeFlag] ) )
+		formatString: #,0
+		displayFolder: 02 Delivery performance
+		lineageTag: 90f9e42f-dd40-47f8-9c4e-ddcdc8b7d48e
+
+	measure 'On Time Shipments' = CALCULATE ( [Shipments], FactShipments[OnTimeFlag] = TRUE () )
+		formatString: #,0
+		displayFolder: 02 Delivery performance
+		lineageTag: d94c7a9c-4f11-4b29-904e-5366b0ec6a06
+
+	measure 'Late Shipments' = CALCULATE ( [Shipments], FactShipments[LateFlag] = TRUE () )
+		formatString: #,0
+		displayFolder: 02 Delivery performance
+		lineageTag: 184f90a7-8425-4f69-b60d-dac9189bb287
+
+	measure 'Freight Cost per Kg' = DIVIDE ( CALCULATE ( [Freight Cost], NOT ISBLANK ( FactShipments[WeightKg] ) ), CALCULATE ( [Shipment Weight Kg], NOT ISBLANK ( FactShipments[FreightCostUSD] ) ) )
+		formatString: $0.00
+		displayFolder: 03 Freight efficiency
+		lineageTag: a29aeb54-2a99-4482-9b41-c1c657caeb28
+
+	measure 'Logistics Cost Rate' = DIVIDE ( [Freight Cost], [Commodity Value] )
+		formatString: 0.0%
+		displayFolder: 03 Freight efficiency
+		lineageTag: 6b1de59f-4abe-492f-8a2f-ad7e0b0b9762
+
+	measure 'Freight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[FreightCostUSD] ) )
+		formatString: #,0
+		displayFolder: 03 Freight efficiency
+		lineageTag: 6e9fbcbe-0e54-45e6-a7b3-934bed723923
+
+	measure 'Weight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[WeightKg] ) )
+		formatString: #,0
+		displayFolder: 03 Freight efficiency
+		lineageTag: c9293542-61da-4277-a803-ba095c13847e
+
+	measure 'Late Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[LateFlag] = TRUE () )
+		formatString: $#,0;($#,0)
+		displayFolder: 04 Risk and prioritization
+		lineageTag: 65ecc092-102f-4107-a05e-07af63eed119
+
+	measure 'Rows with Quality Issues' = CALCULATE ( [Shipment Lines], FactShipmentLines[QualityIssueCount] > 0 )
+		formatString: #,0
+		displayFolder: 05 Data quality
+		lineageTag: 51bd1253-ba16-4187-a7fa-ce3101cb443c
+
+	measure 'Shipments YTD' = TOTALYTD ( [Shipments], DimDate[Date] )
+		formatString: #,0
+		displayFolder: 90 Time intelligence
+		lineageTag: af30e022-2208-4ea6-bf26-800534b0477b
+
+	measure 'First Line Value Share' = DIVIDE ( [First Line Commodity Value], [Commodity Value] )
+		formatString: 0.0%
+		displayFolder: 01 Volume and value
+		lineageTag: 2218fd05-8a63-4319-91ad-156599161b41
+
+	measure 'On Time Delivery Rate' = DIVIDE ( [On Time Shipments], [Delivery Eligible Shipments] )
+		formatString: 0.0%
+		displayFolder: 02 Delivery performance
+		lineageTag: 9e059d20-860d-4f37-ac0c-1eb58f374ee9
+
+	measure 'Late Shipment Rate' = DIVIDE ( [Late Shipments], [Delivery Eligible Shipments] )
+		formatString: 0.0%
+		displayFolder: 02 Delivery performance
+		lineageTag: 7324502c-b1c4-4c1d-8108-a6a9c1a80649
+
+	measure 'Freight Coverage Rate' = DIVIDE ( [Freight Available Shipments], [Shipments] )
+		formatString: 0.0%
+		displayFolder: 03 Freight efficiency
+		lineageTag: 35154890-7746-40c7-a34e-1622e1990732
+
+	measure 'Weight Coverage Rate' = DIVIDE ( [Weight Available Shipments], [Shipments] )
+		formatString: 0.0%
+		displayFolder: 03 Freight efficiency
+		lineageTag: 6d22c05f-4a92-4b08-bfc4-d8aec0297192
+
+	measure 'Late Value Share' = DIVIDE ( [Late Commodity Value], [Commodity Value] )
+		formatString: 0.0%
+		displayFolder: 04 Risk and prioritization
+		lineageTag: 9e0dca3b-8124-4f80-b798-2b5b2e246b52
+
+	measure 'Delivery Risk Status' = SWITCH ( TRUE (), [Delivery Eligible Shipments] = 0, "No eligible shipments", [On Time Delivery Rate] >= 0.95, "Target met", [On Time Delivery Rate] >= 0.85, "Monitor", "Action required" )
+		displayFolder: 04 Risk and prioritization
+		lineageTag: 5744a339-f5ce-4e27-9cf8-524f28c440bf
+
+	measure 'On Time Delivery Rate PY' = CALCULATE ( [On Time Delivery Rate], DATEADD ( DimDate[Date], -1, YEAR ) )
+		formatString: 0.0%
+		displayFolder: 90 Time intelligence
+		lineageTag: eee94b5f-fbed-4f2e-abea-84cfbfda8b2d
+
+	measure 'On Time Rate YoY Change' = [On Time Delivery Rate] - [On Time Delivery Rate PY]
+		formatString: 0.0%
+		displayFolder: 90 Time intelligence
+		lineageTag: 4933dc2c-589a-4397-8b5b-89903d3ec785
+
+	column ShipmentKey
+		dataType: int64
+		isHidden
+		lineageTag: 4a1de119-7c4a-4b51-895e-52d4ea8a5689
+		summarizeBy: none
+		sourceColumn: ShipmentKey
+
+	column ASNOrDeliveryNote
+		dataType: string
+		lineageTag: d5ec177a-15ef-4b6e-afb2-98338781a765
+		summarizeBy: none
+		sourceColumn: ASNOrDeliveryNote
+
+	column ProjectKey
+		dataType: int64
+		isHidden
+		lineageTag: 2a6a9d1f-f58a-4794-a3fc-2ac104a552a3
+		summarizeBy: none
+		sourceColumn: ProjectKey
+
+	column CountryKey
+		dataType: int64
+		isHidden
+		lineageTag: 71ebdef0-5763-4ef7-a919-e6f2bca42a2c
+		summarizeBy: none
+		sourceColumn: CountryKey
+
+	column VendorKey
+		dataType: int64
+		isHidden
+		lineageTag: 557f01ed-8485-4bbf-8826-278b026350c4
+		summarizeBy: none
+		sourceColumn: VendorKey
+
+	column ManufacturingSiteKey
+		dataType: int64
+		isHidden
+		lineageTag: 5104a1ff-ad1d-494c-a640-6675606c883c
+		summarizeBy: none
+		sourceColumn: ManufacturingSiteKey
+
+	column ShippingMethodKey
+		dataType: int64
+		isHidden
+		lineageTag: 6d9dee06-d898-446e-9d5d-c3406ea49352
+		summarizeBy: none
+		sourceColumn: ShippingMethodKey
+
+	column OrderDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 6d74e728-d9de-49a9-8b13-d797417a7915
+		summarizeBy: none
+		sourceColumn: OrderDateKey
+
+	column ScheduledDeliveryDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 3ccfc694-4b0a-49bc-b785-54dbbb6d0df5
+		summarizeBy: none
+		sourceColumn: ScheduledDeliveryDateKey
+
+	column ActualDeliveryDateKey
+		dataType: int64
+		isHidden
+		lineageTag: aba0d172-824f-4aaa-9fdf-0646f1ef4df4
+		summarizeBy: none
+		sourceColumn: ActualDeliveryDateKey
+
+	column DeliveryRecordedDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 204cd4f6-a5f8-40d6-9c22-923fb94a3047
+		summarizeBy: none
+		sourceColumn: DeliveryRecordedDateKey
+
+	column PurchaseOrderNumber
+		dataType: string
+		lineageTag: 09165e4a-ec56-475b-a63c-b6c13e7f267b
+		summarizeBy: none
+		sourceColumn: PurchaseOrderNumber
+
+	column ShipmentLineCount
+		dataType: int64
+		lineageTag: 224bab71-7ced-4f07-b058-66b563205ef3
+		summarizeBy: none
+		sourceColumn: ShipmentLineCount
+
+	column LineItemQuantity
+		dataType: int64
+		lineageTag: ee7b5f02-4821-462d-8a8b-f93cdd54c5a8
+		summarizeBy: none
+		sourceColumn: LineItemQuantity
+
+	column LineItemValueUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 052999ef-742f-4643-84ea-feb92f10c55e
+		summarizeBy: none
+		sourceColumn: LineItemValueUSD
+
+	column InsuranceUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 71d7a7b1-e1b7-4623-8a62-a30427231f86
+		summarizeBy: none
+		sourceColumn: InsuranceUSD
+
+	column WeightKg
+		dataType: double
+		formatString: #,0.00
+		lineageTag: d18547d7-a3b9-439d-9fe0-59d3632572e0
+		summarizeBy: none
+		sourceColumn: WeightKg
+
+	column FreightCostUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: a1705ff1-55f5-4e11-a870-c87e2160e432
+		summarizeBy: none
+		sourceColumn: FreightCostUSD
+
+	column DeliveryDelayDays
+		dataType: int64
+		lineageTag: 827e74eb-7eb1-487e-bf6b-6186d0ef86aa
+		summarizeBy: none
+		sourceColumn: DeliveryDelayDays
+
+	column OrderToDeliveryDays
+		dataType: int64
+		lineageTag: 64aac362-60db-455a-b325-2cd28992bd7b
+		summarizeBy: none
+		sourceColumn: OrderToDeliveryDays
+
+	column OnTimeFlag
+		dataType: boolean
+		lineageTag: e6028daf-e57c-4274-b273-8faac1b497f9
+		summarizeBy: none
+		sourceColumn: OnTimeFlag
+
+	column LateFlag
+		dataType: boolean
+		lineageTag: 3a4f2ea0-39c8-4d27-a9db-65102d0b2a24
+		summarizeBy: none
+		sourceColumn: LateFlag
+
+	column FirstLineDesignation
+		dataType: boolean
+		lineageTag: 532a2d6a-6fda-4a8e-8772-9dd0d614264c
+		summarizeBy: none
+		sourceColumn: FirstLineDesignation
+
+	column AttributeConflictCount
+		dataType: int64
+		isHidden
+		lineageTag: 0147c720-2736-45cd-b499-343772a36b8f
+		summarizeBy: none
+		sourceColumn: AttributeConflictCount
+
+	column QualityIssueCount
+		dataType: int64
+		isHidden
+		lineageTag: 756b4ac3-f1f4-48a3-a520-2e826fd05881
+		summarizeBy: none
+		sourceColumn: QualityIssueCount
+
+	partition FactShipments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\FactShipments.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ShipmentKey", Int64.Type}, {"ASNOrDeliveryNote", type text}, {"ProjectKey", Int64.Type}, {"CountryKey", Int64.Type}, {"VendorKey", Int64.Type}, {"ManufacturingSiteKey", Int64.Type}, {"ShippingMethodKey", Int64.Type}, {"OrderDateKey", Int64.Type}, {"ScheduledDeliveryDateKey", Int64.Type}, {"ActualDeliveryDateKey", Int64.Type}, {"DeliveryRecordedDateKey", Int64.Type}, {"PurchaseOrderNumber", type text}, {"ShipmentLineCount", Int64.Type}, {"LineItemQuantity", Int64.Type}, {"LineItemValueUSD", type number}, {"InsuranceUSD", type number}, {"WeightKg", type number}, {"FreightCostUSD", type number}, {"DeliveryDelayDays", Int64.Type}, {"OrderToDeliveryDays", Int64.Type}, {"OnTimeFlag", type logical}, {"LateFlag", type logical}, {"FirstLineDesignation", type logical}, {"AttributeConflictCount", Int64.Type}, {"QualityIssueCount", Int64.Type}}, "en-US")
+				in
+				    #"Changed Type"
+

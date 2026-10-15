@@ -1,0 +1,68 @@
+table DimProduct
+	lineageTag: f542fd9c-31ab-46db-849c-b26b66bf38cd
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		lineageTag: 711ee4cd-5489-48b4-932f-df9078094730
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column ProductGroup
+		dataType: string
+		lineageTag: cc14e498-3dfa-41de-8101-89e43aef1554
+		summarizeBy: none
+		sourceColumn: ProductGroup
+
+	column SubClassification
+		dataType: string
+		lineageTag: d0fcbff9-ca29-4855-910e-2b13d2fdb026
+		summarizeBy: none
+		sourceColumn: SubClassification
+
+	column ItemDescription
+		dataType: string
+		lineageTag: ea6056e0-a5c7-407b-8574-8c457d23e38f
+		summarizeBy: none
+		sourceColumn: ItemDescription
+
+	column MoleculeOrTestType
+		dataType: string
+		lineageTag: 21029417-d6ae-43a7-bde6-22ba9f9ed17f
+		summarizeBy: none
+		sourceColumn: MoleculeOrTestType
+
+	column Brand
+		dataType: string
+		lineageTag: 36c9818c-baa5-4e59-a55c-19fd13687dda
+		summarizeBy: none
+		sourceColumn: Brand
+
+	column Dosage
+		dataType: string
+		lineageTag: 69b68ac2-33f5-4789-b435-615b3b95bd8d
+		summarizeBy: none
+		sourceColumn: Dosage
+
+	column DosageForm
+		dataType: string
+		lineageTag: 81167737-783e-4a1f-9408-9e78c032c22d
+		summarizeBy: none
+		sourceColumn: DosageForm
+
+	column UnitsPerPack
+		dataType: int64
+		lineageTag: 48dfecd4-3eb6-4594-8732-e68c3fba4b2a
+		summarizeBy: none
+		sourceColumn: UnitsPerPack
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\DimProduct.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ProductKey", Int64.Type}, {"ProductGroup", type text}, {"SubClassification", type text}, {"ItemDescription", type text}, {"MoleculeOrTestType", type text}, {"Brand", type text}, {"Dosage", type text}, {"DosageForm", type text}, {"UnitsPerPack", Int64.Type}}, "en-US")
+				in
+				    #"Changed Type"
+

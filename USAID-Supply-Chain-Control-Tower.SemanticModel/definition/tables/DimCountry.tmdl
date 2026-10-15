@@ -1,0 +1,26 @@
+table DimCountry
+	lineageTag: b8b355fd-1972-4a9c-9ced-a7071016584f
+
+	column CountryKey
+		dataType: int64
+		isHidden
+		lineageTag: c0336418-0dd6-4373-ad2c-002fdba0c083
+		summarizeBy: none
+		sourceColumn: CountryKey
+
+	column Country
+		dataType: string
+		lineageTag: 844d6b72-88b3-43c7-8bc5-62a4c99c5d14
+		summarizeBy: none
+		sourceColumn: Country
+
+	partition DimCountry = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\DimCountry.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"CountryKey", Int64.Type}, {"Country", type text}}, "en-US")
+				in
+				    #"Changed Type"
+

@@ -1,0 +1,219 @@
+table FactShipmentLines
+	lineageTag: 57c0fd0a-d21b-4d68-9d86-3e7ac6fb2a11
+
+	column ShipmentLineKey
+		dataType: int64
+		isHidden
+		lineageTag: b98a3b72-492e-436f-8292-038241f26bb1
+		summarizeBy: none
+		sourceColumn: ShipmentLineKey
+
+	column SourceRowNumber
+		dataType: int64
+		isHidden
+		lineageTag: 4a759e34-17d0-49ec-a444-84acc85776cb
+		summarizeBy: none
+		sourceColumn: SourceRowNumber
+
+	column ProjectKey
+		dataType: int64
+		isHidden
+		lineageTag: 3e0d1bb4-b9be-4665-9122-63bd51f6ef51
+		summarizeBy: none
+		sourceColumn: ProjectKey
+
+	column CountryKey
+		dataType: int64
+		isHidden
+		lineageTag: 3ee87094-f0d8-4aff-a4e3-844731ff7975
+		summarizeBy: none
+		sourceColumn: CountryKey
+
+	column VendorKey
+		dataType: int64
+		isHidden
+		lineageTag: 53adffa6-d95e-4a23-a917-e217f18617fc
+		summarizeBy: none
+		sourceColumn: VendorKey
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		lineageTag: a42b2ca9-d3f8-4c8b-8f85-27b14b155017
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+	column ManufacturingSiteKey
+		dataType: int64
+		isHidden
+		lineageTag: 7bcab73e-7f37-49ed-8b69-f4d833760ffd
+		summarizeBy: none
+		sourceColumn: ManufacturingSiteKey
+
+	column ShippingMethodKey
+		dataType: int64
+		isHidden
+		lineageTag: 50b6f58c-59f7-4a0c-a0dc-2f7c8c9ec08a
+		summarizeBy: none
+		sourceColumn: ShippingMethodKey
+
+	column OrderDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 6f856c30-57ca-4ce4-ae4f-b595a0142e6b
+		summarizeBy: none
+		sourceColumn: OrderDateKey
+
+	column ScheduledDeliveryDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 5bc8d9e0-e439-4d38-9739-47b9836a4e4d
+		summarizeBy: none
+		sourceColumn: ScheduledDeliveryDateKey
+
+	column ActualDeliveryDateKey
+		dataType: int64
+		isHidden
+		lineageTag: a49c8ebd-5ee0-41e0-a6a2-5b2e1351248f
+		summarizeBy: none
+		sourceColumn: ActualDeliveryDateKey
+
+	column DeliveryRecordedDateKey
+		dataType: int64
+		isHidden
+		lineageTag: 23ee2a38-0038-458a-8e77-c6f2e46c0b1a
+		summarizeBy: none
+		sourceColumn: DeliveryRecordedDateKey
+
+	column PurchaseOrderNumber
+		dataType: string
+		lineageTag: 26d951c0-0c15-4ae8-9145-03b01027a93c
+		summarizeBy: none
+		sourceColumn: PurchaseOrderNumber
+
+	column ASNOrDeliveryNote
+		dataType: string
+		lineageTag: f4b5897d-98d3-4437-8509-fd614a1d4e32
+		summarizeBy: none
+		sourceColumn: ASNOrDeliveryNote
+
+	column FirstLineDesignation
+		dataType: boolean
+		lineageTag: 2d4a9c1e-8ea1-4898-9d0d-53ebfdb9a148
+		summarizeBy: none
+		sourceColumn: FirstLineDesignation
+
+	column LineItemQuantity
+		dataType: int64
+		lineageTag: 0b7761fc-0d08-4093-b368-e7b3d27398fd
+		summarizeBy: none
+		sourceColumn: LineItemQuantity
+
+	column LineItemValueUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 25707d13-cf7d-4c0c-9f07-982c8868bb9f
+		summarizeBy: none
+		sourceColumn: LineItemValueUSD
+
+	column PackPriceUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c37b5871-92e6-40b9-8817-92edd6ae80f6
+		summarizeBy: none
+		sourceColumn: PackPriceUSD
+
+	column UnitPriceUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 1409728b-eb23-4b9c-b04f-e1dfc7d19ee3
+		summarizeBy: none
+		sourceColumn: UnitPriceUSD
+
+	column WeightKg
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 1b9fac23-a7a6-45fc-a85a-71bd8e18ba3b
+		summarizeBy: none
+		sourceColumn: WeightKg
+
+	column FreightCostUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 29dac075-cb89-4eda-a331-fcd9b458cec1
+		summarizeBy: none
+		sourceColumn: FreightCostUSD
+
+	column InsuranceUSD
+		dataType: double
+		formatString: #,0.00
+		lineageTag: dc8b1235-2687-4a8a-980d-a3cace0ba687
+		summarizeBy: none
+		sourceColumn: InsuranceUSD
+
+	column DeliveryDelayDays
+		dataType: int64
+		lineageTag: 1047a048-b07c-4b4d-8408-d6433b599431
+		summarizeBy: none
+		sourceColumn: DeliveryDelayDays
+
+	column OrderToDeliveryDays
+		dataType: int64
+		lineageTag: 336bd537-8c9e-4912-a20a-e827ecae96e1
+		summarizeBy: none
+		sourceColumn: OrderToDeliveryDays
+
+	column OnTimeFlag
+		dataType: boolean
+		lineageTag: 2504be44-95a9-456f-9597-8aafd5b6c246
+		summarizeBy: none
+		sourceColumn: OnTimeFlag
+
+	column LateFlag
+		dataType: boolean
+		lineageTag: 07cae623-b975-46eb-b099-cd22fcf2d29b
+		summarizeBy: none
+		sourceColumn: LateFlag
+
+	column WeightAvailableFlag
+		dataType: boolean
+		lineageTag: 68391672-9ccf-4374-84af-e4a9ace9566c
+		summarizeBy: none
+		sourceColumn: WeightAvailableFlag
+
+	column FreightCostAvailableFlag
+		dataType: boolean
+		lineageTag: 9725fb00-4402-4ed6-89bc-98b030acb381
+		summarizeBy: none
+		sourceColumn: FreightCostAvailableFlag
+
+	column QualityIssueCount
+		dataType: int64
+		isHidden
+		lineageTag: b7564f0b-2439-4207-a783-b3d59a3fe41e
+		summarizeBy: none
+		sourceColumn: QualityIssueCount
+
+	column QualityIssues
+		dataType: string
+		lineageTag: 3e84a4a6-c178-4209-94c8-e55bee59cc64
+		summarizeBy: none
+		sourceColumn: QualityIssues
+
+	column ShipmentKey
+		dataType: int64
+		isHidden
+		lineageTag: cd7ef6e0-84e7-42f2-8f0d-4f9614b5fe02
+		summarizeBy: none
+		sourceColumn: ShipmentKey
+
+	partition FactShipmentLines = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataRoot & "\FactShipmentLines.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ShipmentLineKey", Int64.Type}, {"SourceRowNumber", Int64.Type}, {"ProjectKey", Int64.Type}, {"CountryKey", Int64.Type}, {"VendorKey", Int64.Type}, {"ProductKey", Int64.Type}, {"ManufacturingSiteKey", Int64.Type}, {"ShippingMethodKey", Int64.Type}, {"OrderDateKey", Int64.Type}, {"ScheduledDeliveryDateKey", Int64.Type}, {"ActualDeliveryDateKey", Int64.Type}, {"DeliveryRecordedDateKey", Int64.Type}, {"PurchaseOrderNumber", type text}, {"ASNOrDeliveryNote", type text}, {"FirstLineDesignation", type logical}, {"LineItemQuantity", Int64.Type}, {"LineItemValueUSD", type number}, {"PackPriceUSD", type number}, {"UnitPriceUSD", type number}, {"WeightKg", type number}, {"FreightCostUSD", type number}, {"InsuranceUSD", type number}, {"DeliveryDelayDays", Int64.Type}, {"OrderToDeliveryDays", Int64.Type}, {"OnTimeFlag", type logical}, {"LateFlag", type logical}, {"WeightAvailableFlag", type logical}, {"FreightCostAvailableFlag", type logical}, {"QualityIssueCount", Int64.Type}, {"QualityIssues", type text}, {"ShipmentKey", Int64.Type}}, "en-US")
+				in
+				    #"Changed Type"
+

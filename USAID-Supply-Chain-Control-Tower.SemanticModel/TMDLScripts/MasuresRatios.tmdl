@@ -1,0 +1,20 @@
+createOrReplace
+  ref table FactShipments
+    measure 'First Line Value Share' = DIVIDE ( [First Line Commodity Value], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 01 Volume and value
+    measure 'On Time Delivery Rate' = DIVIDE ( [On Time Shipments], [Delivery Eligible Shipments] )
+      formatString: 0.0%
+      displayFolder: 02 Delivery performance
+    measure 'Late Shipment Rate' = DIVIDE ( [Late Shipments], [Delivery Eligible Shipments] )
+      formatString: 0.0%
+      displayFolder: 02 Delivery performance
+    measure 'Freight Coverage Rate' = DIVIDE ( [Freight Available Shipments], [Shipments] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+    measure 'Weight Coverage Rate' = DIVIDE ( [Weight Available Shipments], [Shipments] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+    measure 'Late Value Share' = DIVIDE ( [Late Commodity Value], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 04 Risk and prioritization
