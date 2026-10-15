@@ -1,0 +1,47 @@
+createOrReplace
+
+  ref table FactShipments
+
+    measure 'First Line Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[FirstLineDesignation] = TRUE () )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+
+    measure 'Delivery Eligible Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[OnTimeFlag] ) )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'On Time Shipments' = CALCULATE ( [Shipments], FactShipments[OnTimeFlag] = TRUE () )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'Late Shipments' = CALCULATE ( [Shipments], FactShipments[LateFlag] = TRUE () )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'Freight Cost per Kg' = DIVIDE ( CALCULATE ( [Freight Cost], NOT ISBLANK ( FactShipments[WeightKg] ) ), CALCULATE ( [Shipment Weight Kg], NOT ISBLANK ( FactShipments[FreightCostUSD] ) ) )
+      formatString: $0.00
+      displayFolder: 03 Freight efficiency
+
+    measure 'Logistics Cost Rate' = DIVIDE ( [Freight Cost], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+
+    measure 'Freight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[FreightCostUSD] ) )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+
+    measure 'Weight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[WeightKg] ) )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+
+    measure 'Late Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[LateFlag] = TRUE () )
+      formatString: $#,0;($#,0)
+      displayFolder: 04 Risk and prioritization
+
+    measure 'Rows with Quality Issues' = CALCULATE ( [Shipment Lines], FactShipmentLines[QualityIssueCount] > 0 )
+      formatString: #,0
+      displayFolder: 05 Data quality
+
+    measure 'Shipments YTD' = TOTALYTD ( [Shipments], DimDate[Date] )
+      formatString: #,0
+      displayFolder: 90 Time intelligence

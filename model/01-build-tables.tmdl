@@ -1,0 +1,602 @@
+createOrReplace
+
+  model Model
+    culture: en-US
+    defaultPowerBIDataSourceVersion: powerBI_V3
+    sourceQueryCulture: en-US
+    dataAccessOptions
+      legacyRedirects
+      returnErrorValuesAsNull
+
+    expression DataRoot = "C:\Users\adurr\miniconda3\PowerBI-Portfolio\data\processed" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+    table DimCountry
+
+      column CountryKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: CountryKey
+
+      column Country
+        dataType: string
+        summarizeBy: none
+        sourceColumn: Country
+
+      partition DimCountry = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimCountry.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"CountryKey", Int64.Type}, {"Country", type text}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimDate
+
+      column DateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: DateKey
+
+      column Date
+        dataType: dateTime
+        formatString: yyyy-MM-dd
+        summarizeBy: none
+        sourceColumn: Date
+
+      column Year
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: Year
+
+      column Quarter
+        dataType: string
+        summarizeBy: none
+        sourceColumn: Quarter
+
+      column MonthNumber
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: MonthNumber
+
+      column MonthName
+        dataType: string
+        summarizeBy: none
+        sourceColumn: MonthName
+
+      column YearMonth
+        dataType: string
+        summarizeBy: none
+        sourceColumn: YearMonth
+
+      column WeekNumber
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: WeekNumber
+
+      hierarchy Calendar
+        level Year
+          column: Year
+        level Month
+          column: MonthName
+        level Date
+          column: Date
+
+      partition DimDate = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimDate.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"MonthNumber", Int64.Type}, {"MonthName", type text}, {"YearMonth", type text}, {"WeekNumber", Int64.Type}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimManufacturingSite
+
+      column ManufacturingSiteKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ManufacturingSiteKey
+
+      column ManufacturingSite
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ManufacturingSite
+
+      partition DimManufacturingSite = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimManufacturingSite.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ManufacturingSiteKey", Int64.Type}, {"ManufacturingSite", type text}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimProduct
+
+      column ProductKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ProductKey
+
+      column ProductGroup
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ProductGroup
+
+      column SubClassification
+        dataType: string
+        summarizeBy: none
+        sourceColumn: SubClassification
+
+      column ItemDescription
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ItemDescription
+
+      column MoleculeOrTestType
+        dataType: string
+        summarizeBy: none
+        sourceColumn: MoleculeOrTestType
+
+      column Brand
+        dataType: string
+        summarizeBy: none
+        sourceColumn: Brand
+
+      column Dosage
+        dataType: string
+        summarizeBy: none
+        sourceColumn: Dosage
+
+      column DosageForm
+        dataType: string
+        summarizeBy: none
+        sourceColumn: DosageForm
+
+      column UnitsPerPack
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: UnitsPerPack
+
+      partition DimProduct = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimProduct.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ProductKey", Int64.Type}, {"ProductGroup", type text}, {"SubClassification", type text}, {"ItemDescription", type text}, {"MoleculeOrTestType", type text}, {"Brand", type text}, {"Dosage", type text}, {"DosageForm", type text}, {"UnitsPerPack", Int64.Type}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimProject
+
+      column ProjectKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ProjectKey
+
+      column ProjectCode
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ProjectCode
+
+      partition DimProject = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimProject.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ProjectKey", Int64.Type}, {"ProjectCode", type text}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimShippingMethod
+
+      column ShippingMethodKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShippingMethodKey
+
+      column ManagedBy
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ManagedBy
+
+      column FulfillVia
+        dataType: string
+        summarizeBy: none
+        sourceColumn: FulfillVia
+
+      column VendorIncoterm
+        dataType: string
+        summarizeBy: none
+        sourceColumn: VendorIncoterm
+
+      column ShipmentMode
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ShipmentMode
+
+      partition DimShippingMethod = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimShippingMethod.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ShippingMethodKey", Int64.Type}, {"ManagedBy", type text}, {"FulfillVia", type text}, {"VendorIncoterm", type text}, {"ShipmentMode", type text}}, "en-US")
+          in
+              #"Changed Type"
+
+    table DimVendor
+
+      column VendorKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: VendorKey
+
+      column Vendor
+        dataType: string
+        summarizeBy: none
+        sourceColumn: Vendor
+
+      partition DimVendor = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\DimVendor.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"VendorKey", Int64.Type}, {"Vendor", type text}}, "en-US")
+          in
+              #"Changed Type"
+
+    table FactShipmentLines
+
+      column ShipmentLineKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShipmentLineKey
+
+      column SourceRowNumber
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: SourceRowNumber
+
+      column ProjectKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ProjectKey
+
+      column CountryKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: CountryKey
+
+      column VendorKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: VendorKey
+
+      column ProductKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ProductKey
+
+      column ManufacturingSiteKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ManufacturingSiteKey
+
+      column ShippingMethodKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShippingMethodKey
+
+      column OrderDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: OrderDateKey
+
+      column ScheduledDeliveryDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ScheduledDeliveryDateKey
+
+      column ActualDeliveryDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ActualDeliveryDateKey
+
+      column DeliveryRecordedDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: DeliveryRecordedDateKey
+
+      column PurchaseOrderNumber
+        dataType: string
+        summarizeBy: none
+        sourceColumn: PurchaseOrderNumber
+
+      column ASNOrDeliveryNote
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ASNOrDeliveryNote
+
+      column FirstLineDesignation
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: FirstLineDesignation
+
+      column LineItemQuantity
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: LineItemQuantity
+
+      column LineItemValueUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: LineItemValueUSD
+
+      column PackPriceUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: PackPriceUSD
+
+      column UnitPriceUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: UnitPriceUSD
+
+      column WeightKg
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: WeightKg
+
+      column FreightCostUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: FreightCostUSD
+
+      column InsuranceUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: InsuranceUSD
+
+      column DeliveryDelayDays
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: DeliveryDelayDays
+
+      column OrderToDeliveryDays
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: OrderToDeliveryDays
+
+      column OnTimeFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: OnTimeFlag
+
+      column LateFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: LateFlag
+
+      column WeightAvailableFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: WeightAvailableFlag
+
+      column FreightCostAvailableFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: FreightCostAvailableFlag
+
+      column QualityIssueCount
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: QualityIssueCount
+
+      column QualityIssues
+        dataType: string
+        summarizeBy: none
+        sourceColumn: QualityIssues
+
+      column ShipmentKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShipmentKey
+
+      partition FactShipmentLines = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\FactShipmentLines.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ShipmentLineKey", Int64.Type}, {"SourceRowNumber", Int64.Type}, {"ProjectKey", Int64.Type}, {"CountryKey", Int64.Type}, {"VendorKey", Int64.Type}, {"ProductKey", Int64.Type}, {"ManufacturingSiteKey", Int64.Type}, {"ShippingMethodKey", Int64.Type}, {"OrderDateKey", Int64.Type}, {"ScheduledDeliveryDateKey", Int64.Type}, {"ActualDeliveryDateKey", Int64.Type}, {"DeliveryRecordedDateKey", Int64.Type}, {"PurchaseOrderNumber", type text}, {"ASNOrDeliveryNote", type text}, {"FirstLineDesignation", type logical}, {"LineItemQuantity", Int64.Type}, {"LineItemValueUSD", type number}, {"PackPriceUSD", type number}, {"UnitPriceUSD", type number}, {"WeightKg", type number}, {"FreightCostUSD", type number}, {"InsuranceUSD", type number}, {"DeliveryDelayDays", Int64.Type}, {"OrderToDeliveryDays", Int64.Type}, {"OnTimeFlag", type logical}, {"LateFlag", type logical}, {"WeightAvailableFlag", type logical}, {"FreightCostAvailableFlag", type logical}, {"QualityIssueCount", Int64.Type}, {"QualityIssues", type text}, {"ShipmentKey", Int64.Type}}, "en-US")
+          in
+              #"Changed Type"
+
+    table FactShipments
+
+      column ShipmentKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShipmentKey
+
+      column ASNOrDeliveryNote
+        dataType: string
+        summarizeBy: none
+        sourceColumn: ASNOrDeliveryNote
+
+      column ProjectKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ProjectKey
+
+      column CountryKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: CountryKey
+
+      column VendorKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: VendorKey
+
+      column ManufacturingSiteKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ManufacturingSiteKey
+
+      column ShippingMethodKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ShippingMethodKey
+
+      column OrderDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: OrderDateKey
+
+      column ScheduledDeliveryDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ScheduledDeliveryDateKey
+
+      column ActualDeliveryDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: ActualDeliveryDateKey
+
+      column DeliveryRecordedDateKey
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: DeliveryRecordedDateKey
+
+      column PurchaseOrderNumber
+        dataType: string
+        summarizeBy: none
+        sourceColumn: PurchaseOrderNumber
+
+      column ShipmentLineCount
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: ShipmentLineCount
+
+      column LineItemQuantity
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: LineItemQuantity
+
+      column LineItemValueUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: LineItemValueUSD
+
+      column InsuranceUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: InsuranceUSD
+
+      column WeightKg
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: WeightKg
+
+      column FreightCostUSD
+        dataType: double
+        formatString: #,0.00
+        summarizeBy: none
+        sourceColumn: FreightCostUSD
+
+      column DeliveryDelayDays
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: DeliveryDelayDays
+
+      column OrderToDeliveryDays
+        dataType: int64
+        summarizeBy: none
+        sourceColumn: OrderToDeliveryDays
+
+      column OnTimeFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: OnTimeFlag
+
+      column LateFlag
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: LateFlag
+
+      column FirstLineDesignation
+        dataType: boolean
+        summarizeBy: none
+        sourceColumn: FirstLineDesignation
+
+      column AttributeConflictCount
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: AttributeConflictCount
+
+      column QualityIssueCount
+        dataType: int64
+        isHidden
+        summarizeBy: none
+        sourceColumn: QualityIssueCount
+
+      partition FactShipments = m
+        mode: import
+        source =
+          let
+              Source = Csv.Document(File.Contents(DataRoot & "\FactShipments.csv"), [Delimiter=",", Encoding=65001, QuoteStyle=QuoteStyle.Csv]),
+              #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+              #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"ShipmentKey", Int64.Type}, {"ASNOrDeliveryNote", type text}, {"ProjectKey", Int64.Type}, {"CountryKey", Int64.Type}, {"VendorKey", Int64.Type}, {"ManufacturingSiteKey", Int64.Type}, {"ShippingMethodKey", Int64.Type}, {"OrderDateKey", Int64.Type}, {"ScheduledDeliveryDateKey", Int64.Type}, {"ActualDeliveryDateKey", Int64.Type}, {"DeliveryRecordedDateKey", Int64.Type}, {"PurchaseOrderNumber", type text}, {"ShipmentLineCount", Int64.Type}, {"LineItemQuantity", Int64.Type}, {"LineItemValueUSD", type number}, {"InsuranceUSD", type number}, {"WeightKg", type number}, {"FreightCostUSD", type number}, {"DeliveryDelayDays", Int64.Type}, {"OrderToDeliveryDays", Int64.Type}, {"OnTimeFlag", type logical}, {"LateFlag", type logical}, {"FirstLineDesignation", type logical}, {"AttributeConflictCount", Int64.Type}, {"QualityIssueCount", Int64.Type}}, "en-US")
+          in
+              #"Changed Type"
+

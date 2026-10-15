@@ -1,0 +1,113 @@
+// USAID Global Health Supply Chain Control Tower
+
+// 01 Volume and value
+Shipments =
+COUNTROWS ( FactShipments )
+
+Shipment Lines =
+COUNTROWS ( FactShipmentLines )
+
+Line Item Quantity =
+SUM ( FactShipmentLines[LineItemQuantity] )
+
+Commodity Value =
+SUM ( FactShipmentLines[LineItemValueUSD] )
+
+Insurance Value =
+SUM ( FactShipmentLines[InsuranceUSD] )
+
+First Line Commodity Value =
+CALCULATE ( [Commodity Value], FactShipmentLines[FirstLineDesignation] = TRUE () )
+
+First Line Value Share =
+DIVIDE ( [First Line Commodity Value], [Commodity Value] )
+
+// 02 Delivery performance
+Delivery Eligible Shipments =
+CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[OnTimeFlag] ) )
+
+On Time Shipments =
+CALCULATE ( [Shipments], FactShipments[OnTimeFlag] = TRUE () )
+
+Late Shipments =
+CALCULATE ( [Shipments], FactShipments[LateFlag] = TRUE () )
+
+On Time Delivery Rate =
+DIVIDE ( [On Time Shipments], [Delivery Eligible Shipments] )
+
+Late Shipment Rate =
+DIVIDE ( [Late Shipments], [Delivery Eligible Shipments] )
+
+Average Late Days =
+CALCULATE ( AVERAGE ( FactShipments[DeliveryDelayDays] ), FactShipments[LateFlag] = TRUE () )
+
+Average Order to Delivery Days =
+AVERAGE ( FactShipments[OrderToDeliveryDays] )
+
+P90 Late Days =
+PERCENTILEX.INC (
+    FILTER ( FactShipments, FactShipments[LateFlag] = TRUE () ),
+    FactShipments[DeliveryDelayDays],
+    0.9
+)
+
+// 03 Freight efficiency
+Freight Cost =
+SUM ( FactShipments[FreightCostUSD] )
+
+Shipment Weight Kg =
+SUM ( FactShipments[WeightKg] )
+
+Freight Cost per Kg =
+DIVIDE (
+    CALCULATE ( [Freight Cost], NOT ISBLANK ( FactShipments[WeightKg] ) ),
+    CALCULATE ( [Shipment Weight Kg], NOT ISBLANK ( FactShipments[FreightCostUSD] ) )
+)
+
+Logistics Cost Rate =
+DIVIDE ( [Freight Cost], [Commodity Value] )
+
+Freight Available Shipments =
+CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[FreightCostUSD] ) )
+
+Weight Available Shipments =
+CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[WeightKg] ) )
+
+Freight Coverage Rate =
+DIVIDE ( [Freight Available Shipments], [Shipments] )
+
+Weight Coverage Rate =
+DIVIDE ( [Weight Available Shipments], [Shipments] )
+
+// 04 Risk and prioritization
+Late Commodity Value =
+CALCULATE ( [Commodity Value], FactShipmentLines[LateFlag] = TRUE () )
+
+Late Value Share =
+DIVIDE ( [Late Commodity Value], [Commodity Value] )
+
+Delivery Risk Status =
+SWITCH (
+    TRUE (),
+    [Delivery Eligible Shipments] = 0, "No eligible shipments",
+    [On Time Delivery Rate] >= 0.95, "Target met",
+    [On Time Delivery Rate] >= 0.85, "Monitor",
+    "Action required"
+)
+
+// 05 Data quality
+Rows with Quality Issues =
+CALCULATE ( [Shipment Lines], FactShipmentLines[QualityIssueCount] > 0 )
+
+Shipment Attribute Conflicts =
+SUM ( FactShipments[AttributeConflictCount] )
+
+// 90 Time intelligence
+Shipments YTD =
+TOTALYTD ( [Shipments], DimDate[Date] )
+
+On Time Delivery Rate PY =
+CALCULATE ( [On Time Delivery Rate], DATEADD ( DimDate[Date], -1, YEAR ) )
+
+On Time Rate YoY Change =
+[On Time Delivery Rate] - [On Time Delivery Rate PY]

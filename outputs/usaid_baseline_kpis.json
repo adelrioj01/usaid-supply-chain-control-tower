@@ -1,0 +1,225 @@
+{
+  "shipment_count": 7030,
+  "shipment_line_count": 10324,
+  "on_time_rate": 0.8856330014224751,
+  "late_shipment_count": 804,
+  "average_late_days": 20.002487562189053,
+  "average_order_to_delivery_days": 112.9860990443093,
+  "commodity_value_usd": 1627584457.29,
+  "freight_cost_usd": 68817849.41,
+  "freight_coverage_rate": 0.8816500711237554,
+  "weight_coverage_rate": 0.9064011379800854,
+  "freight_cost_per_kg": 3.2425594910342124,
+  "countries": 43,
+  "top_countries_by_shipments": [
+    {
+      "country": "Nigeria",
+      "shipments": 927,
+      "commodity_value_usd": 350272104.8699998,
+      "freight_cost_usd": 14268550.390000004,
+      "late": 112
+    },
+    {
+      "country": "C\u00f4te d'Ivoire",
+      "shipments": 760,
+      "commodity_value_usd": 120884500.89000015,
+      "freight_cost_usd": 6092165.510000006,
+      "late": 82
+    },
+    {
+      "country": "Uganda",
+      "shipments": 584,
+      "commodity_value_usd": 96197336.16,
+      "freight_cost_usd": 5484292.240000002,
+      "late": 69
+    },
+    {
+      "country": "South Africa",
+      "shipments": 581,
+      "commodity_value_usd": 108670145.47000007,
+      "freight_cost_usd": 2493587.300000002,
+      "late": 111
+    },
+    {
+      "country": "Zambia",
+      "shipments": 540,
+      "commodity_value_usd": 246988840.40999997,
+      "freight_cost_usd": 6310437.209999993,
+      "late": 82
+    },
+    {
+      "country": "Vietnam",
+      "shipments": 480,
+      "commodity_value_usd": 56974405.85999998,
+      "freight_cost_usd": 2737277.290000002,
+      "late": 6
+    },
+    {
+      "country": "Haiti",
+      "shipments": 448,
+      "commodity_value_usd": 43502785.9,
+      "freight_cost_usd": 4000498.9300000006,
+      "late": 30
+    },
+    {
+      "country": "Tanzania",
+      "shipments": 434,
+      "commodity_value_usd": 129459495.65000004,
+      "freight_cost_usd": 4827989.320000002,
+      "late": 50
+    },
+    {
+      "country": "Mozambique",
+      "shipments": 404,
+      "commodity_value_usd": 182024690.72000003,
+      "freight_cost_usd": 3294121.060000002,
+      "late": 72
+    },
+    {
+      "country": "Rwanda",
+      "shipments": 377,
+      "commodity_value_usd": 71127583.08000001,
+      "freight_cost_usd": 5893493.230000002,
+      "late": 30
+    }
+  ],
+  "shipment_modes": [
+    {
+      "mode": "Air",
+      "shipments": 4541,
+      "freight_cost_usd": 43038623.50000002,
+      "weight_kg": 8301064.0,
+      "late": 388,
+      "eligible": 4541,
+      "on_time_rate": 0.914556265139837
+    },
+    {
+      "mode": "Truck",
+      "shipments": 1442,
+      "freight_cost_usd": 11865688.229999995,
+      "weight_kg": 7768994.0,
+      "late": 298,
+      "eligible": 1442,
+      "on_time_rate": 0.7933425797503467
+    },
+    {
+      "mode": "Air Charter",
+      "shipments": 494,
+      "freight_cost_usd": 8926108.480000002,
+      "weight_kg": 3420128.0,
+      "late": 52,
+      "eligible": 494,
+      "on_time_rate": 0.8947368421052632
+    },
+    {
+      "mode": "Ocean",
+      "shipments": 327,
+      "freight_cost_usd": 3590728.7900000005,
+      "weight_kg": 1939423.0,
+      "late": 63,
+      "eligible": 327,
+      "on_time_rate": 0.8073394495412844
+    },
+    {
+      "mode": "Unknown",
+      "shipments": 226,
+      "freight_cost_usd": 1396700.4100000004,
+      "weight_kg": 390931.0,
+      "late": 3,
+      "eligible": 226,
+      "on_time_rate": 0.9867256637168141
+    }
+  ],
+  "yearly": [
+    {
+      "year": "2006",
+      "shipments": 52,
+      "late": 0,
+      "eligible": 52,
+      "commodity_value_usd": 4844512.44,
+      "shipment_lines": 65,
+      "on_time_rate": 1.0
+    },
+    {
+      "year": "2007",
+      "shipments": 454,
+      "late": 11,
+      "eligible": 454,
+      "commodity_value_usd": 59636228.169999994,
+      "shipment_lines": 671,
+      "on_time_rate": 0.9757709251101322
+    },
+    {
+      "year": "2008",
+      "shipments": 697,
+      "late": 14,
+      "eligible": 697,
+      "commodity_value_usd": 113542681.01,
+      "shipment_lines": 1108,
+      "on_time_rate": 0.9799139167862266
+    },
+    {
+      "year": "2009",
+      "shipments": 840,
+      "late": 28,
+      "eligible": 840,
+      "commodity_value_usd": 131690555.81999995,
+      "shipment_lines": 1192,
+      "on_time_rate": 0.9666666666666667
+    },
+    {
+      "year": "2010",
+      "shipments": 908,
+      "late": 116,
+      "eligible": 908,
+      "commodity_value_usd": 161160835.87999997,
+      "shipment_lines": 1176,
+      "on_time_rate": 0.8722466960352423
+    },
+    {
+      "year": "2011",
+      "shipments": 851,
+      "late": 186,
+      "eligible": 851,
+      "commodity_value_usd": 229399084.30000013,
+      "shipment_lines": 1049,
+      "on_time_rate": 0.781433607520564
+    },
+    {
+      "year": "2012",
+      "shipments": 885,
+      "late": 68,
+      "eligible": 885,
+      "commodity_value_usd": 240299574.95000014,
+      "shipment_lines": 1253,
+      "on_time_rate": 0.9231638418079096
+    },
+    {
+      "year": "2013",
+      "shipments": 858,
+      "late": 138,
+      "eligible": 858,
+      "commodity_value_usd": 221855446.4100001,
+      "shipment_lines": 1240,
+      "on_time_rate": 0.8391608391608392
+    },
+    {
+      "year": "2014",
+      "shipments": 930,
+      "late": 171,
+      "eligible": 930,
+      "commodity_value_usd": 265671840.38000014,
+      "shipment_lines": 1573,
+      "on_time_rate": 0.8161290322580645
+    },
+    {
+      "year": "2015",
+      "shipments": 555,
+      "late": 72,
+      "eligible": 555,
+      "commodity_value_usd": 199483697.92999995,
+      "shipment_lines": 997,
+      "on_time_rate": 0.8702702702702703
+    }
+  ]
+}

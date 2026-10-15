@@ -1,0 +1,34 @@
+{
+  "name": "Global Health Supply Chain Portfolio",
+  "dataColors": ["#176B87", "#2A9D8F", "#E9C46A", "#E76F51", "#6C63A8", "#457B9D", "#8AB17D", "#BC6C25"],
+  "background": "#F5F7FA",
+  "foreground": "#1F2933",
+  "tableAccent": "#176B87",
+  "good": "#2A9D8F",
+  "neutral": "#E9C46A",
+  "bad": "#C44536",
+  "minimum": "#C44536",
+  "center": "#E9C46A",
+  "maximum": "#2A9D8F",
+  "textClasses": {
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 28, "color": "#16324F"},
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#16324F"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#334E68"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 10, "color": "#486581"}
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{"show": true, "color": {"solid": {"color": "#FFFFFF"}}, "transparency": 0}],
+        "border": [{"show": true, "color": {"solid": {"color": "#D9E2EC"}}, "radius": 6}],
+        "visualHeader": [{"show": false}],
+        "title": [{"show": true, "fontFamily": "Segoe UI Semibold", "fontSize": 12, "fontColor": {"solid": {"color": "#243B53"}}}]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{"color": {"solid": {"color": "#F5F7FA"}}, "transparency": 0}]
+      }
+    }
+  }
+}

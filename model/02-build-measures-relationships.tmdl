@@ -1,0 +1,207 @@
+createOrReplace
+
+  ref table FactShipments
+    measure 'Shipments' = COUNTROWS ( FactShipments )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+
+    measure 'Shipment Lines' = COUNTROWS ( FactShipmentLines )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+
+    measure 'Line Item Quantity' = SUM ( FactShipmentLines[LineItemQuantity] )
+      formatString: #,0
+      displayFolder: 01 Volume and value
+
+    measure 'Commodity Value' = SUM ( FactShipmentLines[LineItemValueUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+
+    measure 'Insurance Value' = SUM ( FactShipmentLines[InsuranceUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+
+    measure 'First Line Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[FirstLineDesignation] = TRUE () )
+      formatString: $#,0;($#,0)
+      displayFolder: 01 Volume and value
+
+    measure 'First Line Value Share' = DIVIDE ( [First Line Commodity Value], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 01 Volume and value
+
+    measure 'Delivery Eligible Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[OnTimeFlag] ) )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'On Time Shipments' = CALCULATE ( [Shipments], FactShipments[OnTimeFlag] = TRUE () )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'Late Shipments' = CALCULATE ( [Shipments], FactShipments[LateFlag] = TRUE () )
+      formatString: #,0
+      displayFolder: 02 Delivery performance
+
+    measure 'On Time Delivery Rate' = DIVIDE ( [On Time Shipments], [Delivery Eligible Shipments] )
+      formatString: 0.0%
+      displayFolder: 02 Delivery performance
+
+    measure 'Late Shipment Rate' = DIVIDE ( [Late Shipments], [Delivery Eligible Shipments] )
+      formatString: 0.0%
+      displayFolder: 02 Delivery performance
+
+    measure 'Average Late Days' = CALCULATE ( AVERAGE ( FactShipments[DeliveryDelayDays] ), FactShipments[LateFlag] = TRUE () )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+
+    measure 'Average Order to Delivery Days' = AVERAGE ( FactShipments[OrderToDeliveryDays] )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+
+    measure 'P90 Late Days' = PERCENTILEX.INC ( FILTER ( FactShipments, FactShipments[LateFlag] = TRUE () ), FactShipments[DeliveryDelayDays], 0.9 )
+      formatString: 0.0
+      displayFolder: 02 Delivery performance
+
+    measure 'Freight Cost' = SUM ( FactShipments[FreightCostUSD] )
+      formatString: $#,0;($#,0)
+      displayFolder: 03 Freight efficiency
+
+    measure 'Shipment Weight Kg' = SUM ( FactShipments[WeightKg] )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+
+    measure 'Freight Cost per Kg' = DIVIDE ( CALCULATE ( [Freight Cost], NOT ISBLANK ( FactShipments[WeightKg] ) ), CALCULATE ( [Shipment Weight Kg], NOT ISBLANK ( FactShipments[FreightCostUSD] ) ) )
+      formatString: $0.00
+      displayFolder: 03 Freight efficiency
+
+    measure 'Logistics Cost Rate' = DIVIDE ( [Freight Cost], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+
+    measure 'Freight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[FreightCostUSD] ) )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+
+    measure 'Weight Available Shipments' = CALCULATE ( [Shipments], NOT ISBLANK ( FactShipments[WeightKg] ) )
+      formatString: #,0
+      displayFolder: 03 Freight efficiency
+
+    measure 'Freight Coverage Rate' = DIVIDE ( [Freight Available Shipments], [Shipments] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+
+    measure 'Weight Coverage Rate' = DIVIDE ( [Weight Available Shipments], [Shipments] )
+      formatString: 0.0%
+      displayFolder: 03 Freight efficiency
+
+    measure 'Late Commodity Value' = CALCULATE ( [Commodity Value], FactShipmentLines[LateFlag] = TRUE () )
+      formatString: $#,0;($#,0)
+      displayFolder: 04 Risk and prioritization
+
+    measure 'Late Value Share' = DIVIDE ( [Late Commodity Value], [Commodity Value] )
+      formatString: 0.0%
+      displayFolder: 04 Risk and prioritization
+
+    measure 'Delivery Risk Status' = SWITCH ( TRUE (), [Delivery Eligible Shipments] = 0, "No eligible shipments", [On Time Delivery Rate] >= 0.95, "Target met", [On Time Delivery Rate] >= 0.85, "Monitor", "Action required" )
+      displayFolder: 04 Risk and prioritization
+
+    measure 'Rows with Quality Issues' = CALCULATE ( [Shipment Lines], FactShipmentLines[QualityIssueCount] > 0 )
+      formatString: #,0
+      displayFolder: 05 Data quality
+
+    measure 'Shipment Attribute Conflicts' = SUM ( FactShipments[AttributeConflictCount] )
+      formatString: #,0
+      displayFolder: 05 Data quality
+
+    measure 'Shipments YTD' = TOTALYTD ( [Shipments], DimDate[Date] )
+      formatString: #,0
+      displayFolder: 90 Time intelligence
+
+    measure 'On Time Delivery Rate PY' = CALCULATE ( [On Time Delivery Rate], DATEADD ( DimDate[Date], -1, YEAR ) )
+      formatString: 0.0%
+      displayFolder: 90 Time intelligence
+
+    measure 'On Time Rate YoY Change' = [On Time Delivery Rate] - [On Time Delivery Rate PY]
+      formatString: 0.0%
+      displayFolder: 90 Time intelligence
+
+  relationship FactShipments_Country
+    fromColumn: FactShipments.CountryKey
+    toColumn: DimCountry.CountryKey
+
+  relationship FactLines_Country
+    fromColumn: FactShipmentLines.CountryKey
+    toColumn: DimCountry.CountryKey
+
+  relationship FactShipments_Vendor
+    fromColumn: FactShipments.VendorKey
+    toColumn: DimVendor.VendorKey
+
+  relationship FactLines_Vendor
+    fromColumn: FactShipmentLines.VendorKey
+    toColumn: DimVendor.VendorKey
+
+  relationship FactShipments_Project
+    fromColumn: FactShipments.ProjectKey
+    toColumn: DimProject.ProjectKey
+
+  relationship FactLines_Project
+    fromColumn: FactShipmentLines.ProjectKey
+    toColumn: DimProject.ProjectKey
+
+  relationship FactShipments_Site
+    fromColumn: FactShipments.ManufacturingSiteKey
+    toColumn: DimManufacturingSite.ManufacturingSiteKey
+
+  relationship FactLines_Site
+    fromColumn: FactShipmentLines.ManufacturingSiteKey
+    toColumn: DimManufacturingSite.ManufacturingSiteKey
+
+  relationship FactShipments_Method
+    fromColumn: FactShipments.ShippingMethodKey
+    toColumn: DimShippingMethod.ShippingMethodKey
+
+  relationship FactLines_Method
+    fromColumn: FactShipmentLines.ShippingMethodKey
+    toColumn: DimShippingMethod.ShippingMethodKey
+
+  relationship FactLines_Product
+    fromColumn: FactShipmentLines.ProductKey
+    toColumn: DimProduct.ProductKey
+
+  relationship FactShipments_ActualDate
+    fromColumn: FactShipments.ActualDeliveryDateKey
+    toColumn: DimDate.DateKey
+
+  relationship FactLines_ActualDate
+    fromColumn: FactShipmentLines.ActualDeliveryDateKey
+    toColumn: DimDate.DateKey
+
+  relationship FactShipments_OrderDate
+    fromColumn: FactShipments.OrderDateKey
+    toColumn: DimDate.DateKey
+    isActive: false
+
+  relationship FactShipments_ScheduledDate
+    fromColumn: FactShipments.ScheduledDeliveryDateKey
+    toColumn: DimDate.DateKey
+    isActive: false
+
+  relationship FactShipments_RecordedDate
+    fromColumn: FactShipments.DeliveryRecordedDateKey
+    toColumn: DimDate.DateKey
+    isActive: false
+
+  relationship FactLines_OrderDate
+    fromColumn: FactShipmentLines.OrderDateKey
+    toColumn: DimDate.DateKey
+    isActive: false
+
+  relationship FactLines_ScheduledDate
+    fromColumn: FactShipmentLines.ScheduledDeliveryDateKey
+    toColumn: DimDate.DateKey
+    isActive: false
+
+  relationship FactLines_RecordedDate
+    fromColumn: FactShipmentLines.DeliveryRecordedDateKey
+    toColumn: DimDate.DateKey
+    isActive: false

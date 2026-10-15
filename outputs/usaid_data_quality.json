@@ -1,0 +1,38 @@
+{
+  "source": {
+    "title": "Supply Chain Shipment Pricing Data",
+    "publisher": "U.S. Agency for International Development",
+    "original_portal_id": "a3rc-nmf6",
+    "catalog_url": "https://catalog.data.gov/dataset/supply-chain-shipment-pricing-dataset",
+    "mirror_repository": "https://github.com/UmbertoFasci/Supply-Chain-Pricing-USAID",
+    "mirror_file_sha": "f65bdd023f4c816990690c50847ca2cb82d51c52",
+    "local_sha256": "c9ca9530539e7dbf37b377f3fcd383e1faa81c8e41c707e280b20a485508a537",
+    "downloaded_on": "2026-10-06"
+  },
+  "raw_rows": 10324,
+  "raw_columns": 33,
+  "date_range": [
+    "2006-04-19",
+    "2015-12-31"
+  ],
+  "output_rows": {
+    "DimDate.csv": 3544,
+    "DimCountry.csv": 43,
+    "DimVendor.csv": 73,
+    "DimProject.csv": 142,
+    "DimManufacturingSite.csv": 88,
+    "DimShippingMethod.csv": 27,
+    "DimProduct.csv": 184,
+    "FactShipments.csv": 7030,
+    "FactShipmentLines.csv": 10324
+  },
+  "quality_issues": {
+    "Freight cost not numeric": 4126,
+    "Insurance missing": 287,
+    "Weight not numeric": 3952
+  },
+  "eligible_delivery_rows": 10324,
+  "eligible_delivery_shipments": 7030,
+  "eligible_freight_rows": 6198,
+  "eligible_weight_rows": 6372
+}
