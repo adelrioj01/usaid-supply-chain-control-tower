@@ -1,5 +1,7 @@
 # USAID Global Health Supply Chain Control Tower
 
+![USAID Global Health Supply Chain Control Tower](assets/usaid-supply-chain-control-tower-cover-simple.png)
+
 Power BI portfolio project built from USAID's public Supply Chain Shipment Pricing Data. The analysis covers health-commodity deliveries made from 2006 through 2015.
 
 ## Live dashboard
